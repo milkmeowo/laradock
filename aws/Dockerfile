@@ -2,6 +2,13 @@ FROM python:slim
 
 MAINTAINER melchabcede@gmail.com
 
+# If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
+ARG CHANGE_SOURCE=true
+RUN if [ ${CHANGE_SOURCE} = true ]; then \
+    sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
+;fi
+
+
 RUN pip install --upgrade --no-cache-dir awsebcli
 RUN apt-get -yqq update && apt-get -yqq install git-all
 

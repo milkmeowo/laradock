@@ -5,6 +5,12 @@ MAINTAINER ZeroC0D3 Team<zeroc0d3.team@gmail.com>
 # Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
 
+# If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
+ARG CHANGE_SOURCE=true
+RUN if [ ${CHANGE_SOURCE} = true ]; then \
+    sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list \
+;fi
+
 # Install Dependencies
 RUN apt-get update && apt-get install -y apt-utils && apt-get upgrade -y
 RUN mkdir /home/site && mkdir /home/site/cache
