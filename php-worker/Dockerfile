@@ -4,9 +4,10 @@
 #--------------------------------------------------------------------------
 #
 
-FROM php:7.1-alpine
+ARG PHP_VERSION=${PHP_VERSION}
+FROM php:${PHP_VERSION}-alpine
 
-MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
+LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
 ARG CHANGE_SOURCE=true
 RUN if [ ${CHANGE_SOURCE} = true ]; then \
@@ -27,8 +28,8 @@ RUN apk --update add wget \
   libgsasl-dev \
   supervisor
 
-RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql mcrypt tokenizer xml
-RUN pecl channel-update pecl.php.net && pecl install memcached && docker-php-ext-enable memcached
+RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml
+RUN pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached
 
 # Install PostgreSQL drivers:
 ARG INSTALL_PGSQL=false
@@ -62,6 +63,13 @@ ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
 #
     # -- Your awesome modifications go here -- #
 
+#
+#--------------------------------------------------------------------------
+# Check PHP version
+#--------------------------------------------------------------------------
+#
+
+RUN php -v | head -n 1 | grep -q "PHP ${PHP_VERSION}."
 
 #
 #--------------------------------------------------------------------------
