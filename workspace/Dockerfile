@@ -303,6 +303,20 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
 ;fi
 
 ###########################################################################
+# Inotify EXTENSION
+###########################################################################
+
+ARG INSTALL_INOTIFY=false
+ARG PHP_VERSION=${PHP_VERSION}
+
+RUN if [ ${INSTALL_INOTIFY} = true ]; then \
+    # Install Php Swoole Extension
+    pecl -q install inotify && \
+    echo "extension=inotify.so" >> /etc/php/${PHP_VERSION}/mods-available/inotify.ini && \
+    ln -s /etc/php/${PHP_VERSION}/mods-available/inotify.ini /etc/php/${PHP_VERSION}/cli/conf.d/inotify.ini \
+;fi
+
+###########################################################################
 # Phalcon EXTENSION
 ###########################################################################
 
@@ -747,6 +761,8 @@ RUN if [ ${INSTALL_DUSK_DEPS} = true ]; then \
   && rm chromedriver_linux64.zip \
 ;fi
 
+RUN apt-get update && \
+    apt-get -y install net-tools inotify-tools
 ###########################################################################
 # Check PHP version:
 ###########################################################################
