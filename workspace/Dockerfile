@@ -303,6 +303,28 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
 ;fi
 
 ###########################################################################
+# Phalcon EXTENSION
+###########################################################################
+
+ARG INSTALL_PHALCON=false
+ARG PHALCON_VERSION=3.3.2
+
+RUN if [ ${INSTALL_PHALCON} = true ]; then \
+    # Install Php Phalcon Extension
+    curl -L -o /tmp/phalcon.tar.gz "https://github.com/phalcon/cphalcon/archive/v${PHALCON_VERSION}.tar.gz" && \
+    mkdir -p phalcon && \
+    tar -C phalcon -zxvf /tmp/phalcon.tar.gz --strip 1 && \
+    ( \
+        cd phalcon/build && \
+        ./install \
+    ) && \
+    rm -r phalcon && \
+    rm /tmp/phalcon.tar.gz && \
+    echo "extension=phalcon.so" >> /etc/php/${PHP_VERSION}/mods-available/phalcon.ini && \
+    ln -s /etc/php/${PHP_VERSION}/mods-available/phalcon.ini /etc/php/${PHP_VERSION}/cli/conf.d/30-phalcon.ini \
+;fi
+
+###########################################################################
 # Drush:
 ###########################################################################
 
@@ -466,6 +488,13 @@ RUN if [ ${INSTALL_V8JS} = true ]; then \
 
 USER laradock
 
+ARG COMPOSER_REPO_PACKAGIST
+ENV COMPOSER_REPO_PACKAGIST ${COMPOSER_REPO_PACKAGIST}
+
+RUN if [ ${COMPOSER_REPO_PACKAGIST} ]; then \
+    composer config -g repo.packagist composer ${COMPOSER_REPO_PACKAGIST} \
+;fi
+
 ARG INSTALL_LARAVEL_ENVOY=false
 
 RUN if [ ${INSTALL_LARAVEL_ENVOY} = true ]; then \
@@ -490,7 +519,7 @@ ARG INSTALL_LARAVEL_INSTALLER=false
 
 RUN if [ ${INSTALL_LARAVEL_INSTALLER} = true ]; then \
     # Install the Laravel Installer
-	composer global require "laravel/installer" \
+    composer global require "laravel/installer" \
 ;fi
 
 ###########################################################################

@@ -397,6 +397,27 @@ RUN if [ ${INSTALL_IMAP} = true ]; then \
 ;fi
 
 ###########################################################################
+# Phalcon EXTENSION
+###########################################################################
+
+ARG INSTALL_PHALCON=false
+ARG PHALCON_VERSION=3.3.2
+
+RUN if [ ${INSTALL_PHALCON} = true ]; then \
+    # Install Php Phalcon Extension
+    curl -L -o /tmp/phalcon.tar.gz "https://github.com/phalcon/cphalcon/archive/v${PHALCON_VERSION}.tar.gz" && \
+    mkdir -p phalcon && \
+    tar -C phalcon -zxvf /tmp/phalcon.tar.gz --strip 1 && \
+    ( \
+        cd phalcon/build && \
+        ./install \
+    ) && \
+    rm -r phalcon && \
+    rm /tmp/phalcon.tar.gz && \
+    docker-php-ext-enable phalcon \
+;fi
+
+###########################################################################
 # Check PHP version:
 ###########################################################################
 
