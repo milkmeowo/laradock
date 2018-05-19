@@ -393,7 +393,7 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
         if [ ${NPM_REGISTRY} ]; then \
         npm config set registry ${NPM_REGISTRY} \
         ;fi && \
-        npm install -g gulp bower vue-cli \
+        npm install -g gulp bower vue-cli pm2 apidoc\
 ;fi
 
 # Wouldn't execute when added to the RUN statement in the above block
@@ -762,7 +762,7 @@ RUN if [ ${INSTALL_DUSK_DEPS} = true ]; then \
 ;fi
 
 RUN apt-get update && \
-    apt-get -y install net-tools inotify-tools
+    apt-get -y install net-tools inotify-tools screen
 ###########################################################################
 # Check PHP version:
 ###########################################################################
