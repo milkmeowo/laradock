@@ -38,33 +38,6 @@ RUN if [ ${INSTALL_PGSQL} = true ]; then \
         && docker-php-ext-install pdo_pgsql \
 ;fi
 
-###########################################################################
-# Swoole EXTENSION
-###########################################################################
-
-ARG INSTALL_SWOOLE=false
-ARG PHP_VERSION=${PHP_VERSION}
-
-RUN if [ ${INSTALL_SWOOLE} = true ]; then \
-    # Install Php Swoole Extension
-    pecl -q install swoole && \
-    docker-php-ext-enable swoole \
-;fi
-
-###########################################################################
-# Inotify EXTENSION
-###########################################################################
-
-ARG INSTALL_INOTIFY=false
-ARG PHP_VERSION=${PHP_VERSION}
-
-RUN if [ ${INSTALL_INOTIFY} = true ]; then \
-    # Install Php Swoole Extension
-    pecl -q install inotify && \
-    docker-php-ext-enable inotify \
-;fi
-
-
 RUN rm /var/cache/apk/* \
     && mkdir -p /var/www
 

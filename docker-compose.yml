@@ -163,8 +163,6 @@ services:
         args:
           - PHP_VERSION=${PHP_VERSION}
           - INSTALL_PGSQL=${PHP_WORKER_INSTALL_PGSQL}
-          - INSTALL_SWOOLE=${PHP_WORKER_INSTALL_SWOOLE}
-          - INSTALL_INOTIFY=${PHP_WORKER_INSTALL_INOTIFY}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
         - ./php-worker/supervisord.d:/etc/supervisord.d
@@ -172,6 +170,8 @@ services:
         - workspace
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
+      ports:
+        - "${PHP_WORKER_PORT}:9001"
       networks:
         - backend
 
@@ -716,4 +716,3 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
       ports:
         - 9010:9000
-

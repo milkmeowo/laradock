@@ -150,9 +150,8 @@ PHP_FPM_INSTALL_PCNTL=false
 
 ### PHP_WORKER ############################################
 
+PHP_WORKER_PORT=9001
 PHP_WORKER_INSTALL_PGSQL=false
-PHP_WORKER_INSTALL_SWOOLE=true
-PHP_WORKER_INSTALL_INOTIFY=true
 
 ### NGINX #################################################
 
