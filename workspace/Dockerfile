@@ -291,6 +291,22 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
 ;fi
 
 ###########################################################################
+# mcrypt:
+###########################################################################
+
+ARG INSTALL_MCRYPT=false
+ARG PHP_VERSION=${PHP_VERSION}
+
+RUN if [ ${INSTALL_MCRYPT} = true ]; then \
+    apt-get update -yqq && \
+    apt-get install libmcrypt-dev -y && \
+    pecl -q install mcrypt-1.0.1 && \
+    echo "extension=mcrypt.so" >> /etc/php/${PHP_VERSION}/mods-available/mcrypt.ini && \
+    ln -s /etc/php/${PHP_VERSION}/mods-available/mcrypt.ini /etc/php/${PHP_VERSION}/cli/conf.d/30-mcrypt.ini \
+
+;fi
+
+###########################################################################
 # PHP REDIS EXTENSION
 ###########################################################################
 
