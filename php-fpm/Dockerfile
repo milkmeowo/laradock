@@ -18,6 +18,15 @@ FROM laradock/php-fpm:2.2-${PHP_VERSION}
 
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
+###########################################################################
+# If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
+ARG CHANGE_SOURCE=true
+RUN if [ ${CHANGE_SOURCE} = true ]; then \
+    sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list; \
+    sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list \
+;fi
+
+
 # always run apt update when start and after add new source list, then clean up at end.
 RUN apt-get update -yqq && \
     pecl channel-update pecl.php.net
@@ -43,14 +52,6 @@ RUN apt-get update -yqq && \
 # Example:
 #   - INSTALL_ZIP_ARCHIVE=true
 #
-
-###########################################################################
-# If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
-ARG CHANGE_SOURCE=true
-RUN if [ ${CHANGE_SOURCE} = true ]; then \
-    sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list; \
-    sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list \
-;fi
 
 #####################################
 # SOAP:
@@ -88,6 +89,19 @@ RUN if [ ${INSTALL_PG_CLIENT} = true ]; then \
     mkdir -p /usr/share/man/man7 && \
     # Install the pgsql client
     apt-get install -y postgresql-client \
+;fi
+
+###########################################################################
+# mcrypt:
+###########################################################################
+
+ARG INSTALL_MCRYPT=false
+
+RUN if [ ${INSTALL_MCRYPT} = true ]; then \
+    apt-get update -yqq && \
+    apt-get install libmcrypt-dev -y && \
+    pecl -q install mcrypt-1.0.1 && \
+    docker-php-ext-enable mcrypt \
 ;fi
 
 ###########################################################################

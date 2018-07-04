@@ -148,6 +148,7 @@ PHP_FPM_INSTALL_SWOOLE=true
 PHP_FPM_INSTALL_PHALCON=true
 PHP_FPM_INSTALL_PG_CLIENT=false
 PHP_FPM_INSTALL_PCNTL=false
+PHP_FPM_INSTALL_MCRYPT=true
 
 ### PHP_WORKER ############################################
 
